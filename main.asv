@@ -1,0 +1,15 @@
+%% GNSS Project 3 - main run file
+
+% Read File - get solutions
+file_name = 'ALBH00CAN_R_20201020000_01D_30S_MO_-30mins_.pos';
+[solutions] = readPos(file_name)
+
+
+time_vals = solutions.time[:,1] + 
+
+% Plot GDOP against time
+figure('position',[50 50 1000 600])
+yyaxis right
+plot(time_vals,solutions.GDOP)
+ylabel('gdop')
+
