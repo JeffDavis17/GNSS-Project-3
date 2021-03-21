@@ -11,8 +11,8 @@ SGO = [1113280.0609,6233644.2886,760276.9549];
 ZIMM = [4331297.348,567555.639,4633133.728];
 
 count = 1;
-locs = [ALBH;ALGO;BAKE]; 
-%locs2 = [MAL;SGO;ZIMM];
+locs = [ALBH;ALGO;BAKE;MAL;SGO;ZIMM]; 
+
 
 p = [];
 time_v = [];
@@ -27,7 +27,7 @@ while (~feof(files))
     
     
     % Approximate positions
-    p = [p;solutions.llh(1,2),solutions.llh(1,1)];
+    p = [p;solutions.llh(end,2),solutions.llh(end,1)];
     
     
     % Plot number of satellites against time
@@ -48,7 +48,6 @@ while (~feof(files))
     lat = solutions.llh(end,1);
     lon = solutions.llh(end,2);
     exact_enu = ECEF_ENU(locs(count,1),locs(count,2),locs(count,3),lat,lon); %Exact
-    %exact_enu2 = ECEF_ENU(locs2(count,1),locs2(count,2),locs2(count,3),lat,lon);%Exact
     enu = ECEF_ENU(solutions.ECEF(:,1),solutions.ECEF(:,2),solutions.ECEF(:,3),lat,lon);
     
 
@@ -57,10 +56,7 @@ while (~feof(files))
     vert = sqrt((enu(:,3) - exact_enu(3)).^2);
     hv = [horz,vert];
     
-%     horz2 = sqrt((enu(:,1) - exact_enu2(1)).^2 + (enu(:,2)-exact_enu2(2)).^2);
-%     vert2 = sqrt((enu(:,3) - exact_enu2(3)).^2);
-%     hv2 = [horz2,vert2];
-    
+
     % Time Series of Horizontal and Vertical Errors
     figure()
     yyaxis left
@@ -72,15 +68,6 @@ while (~feof(files))
     xlabel('time (hr)')
     title('Vertical and Horizontal Error Evolution')
     
-%     figure()
-%     yyaxis left
-%     plot(time_vals,horz2)
-%     ylabel('horizontal error (m)')
-%     yyaxis right
-%     plot(time_vals,vert2)
-%     ylabel('vertical errors (m)')
-%     xlabel('time (hr)')
-%     title('Vertical and Horizontal Error Evolution')
     
     % Time to get less than 5 cents error
     ind = hv <= 0.05;
